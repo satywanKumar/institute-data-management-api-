@@ -6,6 +6,7 @@ const studentRoute = require('./api/route/student');
 const facultyRoute = require('./api/route/faculty');
 const paymantRoute = require('./api/route/payment');
 const userRoute = require('./api/route/user');
+const contactRoute = require('./api/route/contact');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { urlencoded, json } = require('body-parser');
@@ -13,7 +14,7 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 
 
-mongoose.connect('mongodb+srv://.gpk49.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{useNewUrlParser:true});
+mongoose.connect('mongodb+srv://sribstech:satywan123@sribstech.gpk49.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{useNewUrlParser:true, useUnifiedTopology: true});
 
 mongoose.connection.on('error',err=>{
   console.log('connection failed');
@@ -37,6 +38,7 @@ app.use('/student',studentRoute);
 app.use('/faculty',facultyRoute);
 app.use('/payment',paymantRoute);
 app.use('/user',userRoute);
+app.use('/contact',contactRoute);
 app.use(express.static(__dirname+'www'));
 
 // app.use((req,res,next)=>{
