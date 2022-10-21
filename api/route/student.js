@@ -6,9 +6,9 @@ const cloudinary = require('cloudinary').v2;
 const checkAuth = require('../middleware/admin')
 
 cloudinary.config({
-  cloud_name:'',
-  api_key:'',
-  api_secret:''
+  cloud_name:'dmap97ds2',
+  api_key:'392635253424173',
+  api_secret:'UwIU2QdVR_S7KCsxfnxKEtLJ64k'
 });
 
 
@@ -88,7 +88,7 @@ router.post('/',checkAuth,(req,res,next)=>{
       pin:req.body.pin,
       joinDate:req.body.joinDate,
       batch:req.body.batch,
-      imagePath:result.url
+      imagePath:result.secure_url
     });
     student.save()
     .then(result=>{
@@ -153,7 +153,7 @@ router.put('/:id',checkAuth,(req,res,next)=>{
       pin:req.body.pin,
       joinDate:req.body.joinDate,
       batch:req.body.batch,
-      imagePath:result.url
+      imagePath:result.secure_url
     }
   })
   .then(result=>{
