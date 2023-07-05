@@ -5,9 +5,8 @@ const Payment = require('../model/payment');
 const checkAuth = require('../middleware/admin');
 
 
-
 // get all payment history
-router.get('/history',checkAuth,checkAuth,(req,res,next)=>{
+router.get('/history',checkAuth,(req,res,next)=>{
   Payment.find()
   .exec()
   .then(result=>{
@@ -25,13 +24,14 @@ router.get('/history',checkAuth,checkAuth,(req,res,next)=>{
 })
 
 // paid fee
-router.post('/paid',checkAuth,checkAuth,(req,res,next)=>{
+router.post('/paid',checkAuth,(req,res,next)=>{
   const d = new Date();
   // console.log(d.toDateString());
  const payment = new Payment({
     _id: new mongoose.Types.ObjectId,
     name:req.body.name,
     phone:req.body.phone,
+    regNo:req.body.regNo,
     amount:req.body.amount,
     remark:req.body.detail,
     date:d.toUTCString(),
@@ -52,9 +52,9 @@ router.post('/paid',checkAuth,checkAuth,(req,res,next)=>{
   })
 })
 
-// get fee detail by phone
-router.get('/detail/:phone',checkAuth,checkAuth,(req,res,next)=>{
-  Payment.find({phone:req.params.phone})
+// get fee detail by regNo
+router.get('/detail/:regNo',checkAuth,(req,res,next)=>{
+  Payment.find({regNo:req.params.regNo})
   .then(result=>{
     res.status(200).json({
       paymentList:result
@@ -67,8 +67,22 @@ router.get('/detail/:phone',checkAuth,checkAuth,(req,res,next)=>{
   })
 })
 
+// get fee detail by id
+router.get('/detailById/:id',checkAuth,(req,res,next)=>{
+  Payment.findById(req.params.id)
+  .then(result=>{
+    res.status(200).json({
+      payment:result
+    })
+  })
+  .catch(err=>{
+    res.status(500).json({
+      error:err
+    })
+  })
+})
 //get sum of payment month wise
-router.get('/totalpayment/month',checkAuth,checkAuth,(req,res,next)=>{
+router.get('/totalpayment/month',checkAuth,(req,res,next)=>{
   Payment.aggregate([
     // {$match:{month:'0'}},
     {$group:{_id:"$month",total:{$sum:"$amount"}}}
@@ -81,9 +95,9 @@ router.get('/totalpayment/month',checkAuth,checkAuth,(req,res,next)=>{
 })
 
 //total of individual student
-router.get('/totalpayment/:phone',checkAuth,checkAuth,(req,res,next)=>{
+router.get('/totalpayment/:regNo',checkAuth,(req,res,next)=>{
   Payment.aggregate([
-    {$match:{phone:req.params.phone}},
+    {$match:{regNo:req.params.regNo}},
     {$group:{_id:"null",total:{$sum:"$amount"}}}
   ])
   .then(result=>{
